@@ -14,17 +14,16 @@ rooms = {
     302: {"type": "Deluxe Room", "price": 4000, "available": True}
 }
 
-#Bookings are saved here (room number -> guest details)
+
 bookings = {}
 
 
-#Show the rooms in the table
+
 def refresh_table():
-    # Remove old rows first
     for row in table.get_children():
         table.delete(row)
 
-    # Add every room again with its latest status
+    
     for number, info in rooms.items():
         if info["available"]:
             status = "Available"
@@ -43,11 +42,11 @@ def is_valid_name(name):
         if ch.isalpha():
             has_letter = True
         elif ch not in " -'.":
-            return False  # found a number or symbol
-    return has_letter  # must have at least one letter
+            return False  
+    return has_letter 
 
 
-#ADD a booking
+#add a booking function
 def add_booking():
     selected = table.selection()
     if not selected:
@@ -61,33 +60,33 @@ def add_booking():
                                "Room " + str(number) + " is already booked.\nPlease choose another room.")
         return
 
-    # Ask for the guest name
-    # (it keeps asking until the name is valid or the user presses Cancel)
+   
+    # looping until a valid name is entered or the user cancels
     while True:
         guest = simpledialog.askstring("Add Booking", "Guest name:")
         if guest is None:
-            return  # user pressed Cancel, so stop quietly
-        guest = guest.strip()  # remove extra spaces
+            return  
+        guest = guest.strip()  
         if guest == "":
             messagebox.showwarning("Missing Name", "Please enter the guest's name.")
         elif not is_valid_name(guest):
             messagebox.showwarning("Invalid Name", "The name should only contain letters, not numbers or symbols.")
         else:
-            break  # name is good, continue
+            break  
 
-    # Ask for the number of nights
+   
     while True:
         nights = simpledialog.askinteger("Add Booking", "Number of nights:")
         if nights is None:
-            return  # user pressed Cancel
+            return  
         if nights < 1 or nights > 30:
             messagebox.showwarning("Invalid Nights", "Please enter a number of nights from 1 to 30.")
         else:
-            break  # nights is good, continue
+            break  
 
     total = rooms[number]["price"] * nights
 
-    # Save the booking
+    # Save the booking function
     rooms[number]["available"] = False
     bookings[number] = {
         "guest": guest,
@@ -104,7 +103,7 @@ def add_booking():
                         "\nTotal: ₱" + str(total))
 
 
-#CANCEL a booking
+#cancel a booking function
 def cancel_booking():
     selected = table.selection()
     if not selected:
@@ -127,19 +126,19 @@ def cancel_booking():
         messagebox.showinfo("Cancelled", "The booking was cancelled.")
 
 
-#Initialize GUI
+
 root = tk.Tk()
 root.title("Hotel Reservation System")
 root.geometry("700x420")
 
-# Title
+
 title = tk.Label(root, text="Hotel Reservation System", font=("Arial", 18, "bold"))
 title.pack(pady=10)
 
 tip = tk.Label(root, text="Click a room, then press a button below.")
 tip.pack()
 
-# Table of rooms
+
 columns = ("Room", "Type", "Price", "Status", "Guest")
 table = ttk.Treeview(root, columns=columns, show="headings", height=8)
 for col in columns:
@@ -147,7 +146,7 @@ for col in columns:
     table.column(col, width=120, anchor="center")
 table.pack(padx=15, pady=10, fill="x")
 
-# Buttons
+
 button_frame = tk.Frame(root)
 button_frame.pack(pady=10)
 
